@@ -33,6 +33,7 @@ class Board:
     def __getitem__(self, key):
         return self.board[key[1]][key[0]]
 
+
     def __create_board(self) -> list[list[Checker]]:
         board = list()
         for y, r in enumerate(INITIAL_BOARD):
