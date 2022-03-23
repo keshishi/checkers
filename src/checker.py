@@ -32,7 +32,7 @@ class Checker:
         
     def get_moves(self):
         moves = defaultdict(list)
-        delta_set = KING_DELTAS if self.king else (WHITE_DELTAS if self.is_color(WHITE) else BLACK_DELTAS)
+        delta_set = KING_DELTAS if self.king else (WHITE_DELTAS if self.is_color(WHITE) else BLACK_DELTAS)
         for x_delta, y_delta in KING_DELTAS:
             potential_coord = (self.x + x_delta, self.y + y_delta)
             if valid_coord(potential_coord):
