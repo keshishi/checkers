@@ -15,8 +15,10 @@ class Game:
         print(self.game_board)
         while running:
             move_list = self.get_movelist()
+            self.win_by_block(move_list)
             selected_move = self.get_selected_move(move_list)
             self.game_board.move_piece(selected_move)
+            self.game_board.promote_pieces()
             self.swap_turn()
             print(self.game_board)
             
@@ -46,3 +48,7 @@ class Game:
     def swap_turn(self):
         self.current_player = WHITE if self.current_player == BLACK else BLACK
  
+ 
+    def win_by_block(self, move_list):
+        if len(move_list) == 0:
+            print("Someone one, TODO figure this out later")

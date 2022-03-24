@@ -30,18 +30,18 @@ class Checker:
     def is_not_ally(self, coord):
         return self.color != self.board[coord].color
         
-    def get_moves(self):
+    def get_moves(self, must_kill):
         moves = defaultdict(list)
         delta_set = KING_DELTAS if self.king else (WHITE_DELTAS if self.is_color(WHITE) else BLACK_DELTAS)
-        for x_delta, y_delta in KING_DELTAS:
-            potential_coord = (self.x + x_delta, self.y + y_delta)
+        for dx, dy in delta_set:
+            potential_coord = (self.x + dx, self.y + dy)
             if valid_coord(potential_coord):
-                if self.board.is_unoccupied(potential_coord):
-                    moves['general'].append(Move((self.x, self.y), potential_coord, False))
+                if not must_kill and self.board.is_unoccupied(potential_coord):
+                    moves['optional'].append(Move((self.x, self.y), potential_coord, False))
                 elif self.is_not_ally(potential_coord):
-                    potential_coord = (self.x + x_delta*2, self.y + y_delta*2)
-                    if valid_coord(potential_coord) and self.board.is_unoccupied(potential_coord) :
-                        moves['forced'].append(Move((self.x, self.y), potential_coord, True))    
+                    potential_jump = (self.x + dx*2, self.y + dy*2)
+                    if valid_coord(potential_jump) and self.board.is_unoccupied(potential_jump) :
+                        moves['forced'].append(Move((self.x, self.y), potential_jump, potential_coord))
         return moves
         
     def copy_color(self, piece):

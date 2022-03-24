@@ -1,5 +1,5 @@
 from checker import Checker, Move
-from constants import INITIAL_BOARD
+from constants import *
 
 
 class Board:
@@ -43,25 +43,33 @@ class Board:
         return board
 
     def get_moves(self, color):
-        force_moves = list()
-        moves = list()
+        moves = defaultdict(list)
         for checker in self:
             if checker.is_color(color):
                 options = checker.get_moves()
-                force_moves.extend(options['forced'])
-                moves.extend(options['general'])
-        return force_moves if len(force_moves) > 0 else moves
+                moves['all_forced'].extend(options['forced'])
+                moves['all_optional'].extend(options['optional'])
+        return moves
         
     def is_unoccupied(self, pair) -> bool:
         return self[pair].is_color('.')
         
     def move_piece(self, move):
         if move.kill:
-            pass
+            self[move.end_pos].copy_color(self[move.start_pos])
+            self[move.start_pos].clear_piece()
+            self[move.kill].clear_piece()
         else:
             self[move.end_pos].copy_color(self[move.start_pos])
             self[move.start_pos].clear_piece()
         
+    def promote_pieces(self):
+        for checker in self.board[0]:
+            if checker.color == WHITE:
+                checker.king = True
+        for checker in self.board[-1]:
+            if checker.color == BLACK:
+                checker.king = True
         
         
         
